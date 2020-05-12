@@ -1,17 +1,44 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import { render } from 'react-dom'
+import './index.css'
+import { ApolloProvider } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
+import { WebSocketLink } from '@apollo/link-ws'
+import Planets from './Planets'
+import { getMainDefinition } from '@apollo/client/utilities'
+const GRAPHQL_ENDPOINT = 'ylp-hasura.herokuapp.com/v1/graphql'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const httpLink = new HttpLink({
+  uri: `https://${GRAPHQL_ENDPOINT}`,
+})
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const wsLink = new WebSocketLink({
+  uri: `ws://${GRAPHQL_ENDPOINT}`,
+  options: {
+    reconnect: true,
+  },
+})
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  wsLink,
+  httpLink
+)
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: splitLink,
+})
+
+const App = () => (
+  <ApolloProvider client={client}>
+    <Planets />
+  </ApolloProvider>
+)
+
+render(<App />, document.getElementById('root'))
