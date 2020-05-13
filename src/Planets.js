@@ -1,5 +1,6 @@
 import React from 'react'
 import { useQuery, gql } from '@apollo/client'
+import { List, ListItem } from './List'
 
 const PLANETS = gql`
   {
@@ -12,14 +13,17 @@ const PLANETS = gql`
 `
 const Planets = ({ newPlanets }) => {
   const { loading, error, data } = useQuery(PLANETS)
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error :( </p>
-  return data.planets.map(({ id, name, description }) => (
-    <div key={id}>
-      <p>
+  const renderPlanets = (planets) => {
+    return planets.map(({ id, name, description }) => (
+      <ListItem key={id}>
         {name} | {description}
-      </p>
-    </div>
-  ))
+      </ListItem>
+    ))
+  }
+
+  if (loading) return <p>Loading ...</p>
+  if (error) return <p>Error :(</p>
+
+  return <List>{renderPlanets(newPlanets || data.planets)}</List>
 }
 export default Planets
