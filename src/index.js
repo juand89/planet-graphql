@@ -4,7 +4,7 @@ import './index.css'
 import { ApolloProvider } from '@apollo/client'
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
-import Planets from './Planets'
+import PlanetSearch from './PlanetSearch'
 import { getMainDefinition } from '@apollo/client/utilities'
 const GRAPHQL_ENDPOINT = 'ylp-hasura.herokuapp.com/v1/graphql'
 
@@ -37,7 +37,7 @@ const client = new ApolloClient({
 
 const App = () => (
   <ApolloProvider client={client}>
-    <Planets />
+    <PlanetSearch />
   </ApolloProvider>
 )
 
