@@ -14,16 +14,24 @@ const PLANETS = gql`
 const Planets = ({ newPlanets }) => {
   const { loading, error, data } = useQuery(PLANETS)
   const renderPlanets = (planets) => {
-    return planets.map(({ id, name, description }) => (
-      <ListItem key={id}>
-        {name} | {description}
-      </ListItem>
-    ))
+    if (planets) {
+      return planets.map(({ id, name, description }) => (
+        <ListItem key={id}>
+          {name} | {description}
+        </ListItem>
+      ))
+    } else {
+      return data.planets.map(({ id, name, description }) => (
+        <ListItem key={id}>
+          {name} | {description}
+        </ListItem>
+      ))
+    }
   }
 
   if (loading) return <p>Loading ...</p>
   if (error) return <p>Error :(</p>
 
-  return <List>{renderPlanets(newPlanets || data.planets)}</List>
+  return <List>{renderPlanets(newPlanets)}</List>
 }
 export default Planets
