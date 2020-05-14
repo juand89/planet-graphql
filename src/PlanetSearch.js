@@ -20,7 +20,7 @@ const PlanetSearch = () => {
       <Search
         inputVal={inputVal}
         onChange={(event) => setInputVal(event.target.value)}
-        onSearch={() => search({ variables: `%${inputVal}%` })}
+        onSearch={() => search({ variables: { match: `%${inputVal}%` } })}
       />
       <Planets newPlanets={data ? data.planets : null} />
     </div>
