@@ -1,6 +1,7 @@
 import React from 'react'
 import { useQuery, gql } from '@apollo/client'
-import { List, ListItem } from './List'
+import { Link } from 'react-router-dom'
+import { List, ListItemWithLink } from './List'
 
 const PLANETS = gql`
   {
@@ -16,15 +17,19 @@ const Planets = ({ newPlanets }) => {
   const renderPlanets = (planets) => {
     if (planets) {
       return planets.map(({ id, name, description }) => (
-        <ListItem key={id}>
-          {name} | {description}
-        </ListItem>
+        <ListItemWithLink key={id}>
+          <Link to={`/planet/${id}`}>
+            {name} | {description}
+          </Link>
+        </ListItemWithLink>
       ))
     } else {
       return data.planets.map(({ id, name, description }) => (
-        <ListItem key={id}>
-          {name} | {description}
-        </ListItem>
+        <ListItemWithLink key={id}>
+          <Link to={`/planet/${id}`}>
+            {name} | {description}
+          </Link>
+        </ListItemWithLink>
       ))
     }
   }

@@ -5,7 +5,9 @@ import { ApolloProvider } from '@apollo/client'
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
 import PlanetSearch from './PlanetSearch'
+import Planet from './Planets'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 const GRAPHQL_ENDPOINT = 'ylp-hasura.herokuapp.com/v1/graphql'
 
 const httpLink = new HttpLink({
@@ -36,9 +38,15 @@ const client = new ApolloClient({
 })
 
 const App = () => (
-  <ApolloProvider client={client}>
-    <PlanetSearch />
-  </ApolloProvider>
+  <BrowserRouter>
+    <ApolloProvider client={client}>
+      <Switch>
+        <Route path="/planet/:id" component={Planet} />
+        <Route path="/" component={PlanetSearch} />
+      </Switch>
+      {/* <PlanetSearch /> */}
+    </ApolloProvider>
+  </BrowserRouter>
 )
 
 render(<App />, document.getElementById('root'))
