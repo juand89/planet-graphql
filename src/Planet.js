@@ -1,9 +1,9 @@
 import React from 'react'
-import { useQuery, gql } from '@apollo/client'
+import { useSubscription, gql } from '@apollo/client'
 import { List, ListItem } from './List'
 
 const PLANET = gql`
-  query Planet($id: uuid!) {
+  subscription Planet($id: uuid!) {
     planets_by_pk(id: $id) {
       id
       name
@@ -20,7 +20,7 @@ const Planet = ({
     params: { id },
   },
 }) => {
-  const { loading, error, data } = useQuery(PLANET, {
+  const { loading, error, data } = useSubscription(PLANET, {
     variables: { id },
   })
   if (loading) return <p>Loading...</p>
