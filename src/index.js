@@ -44,7 +44,6 @@ const App = () => (
         <Route path="/planet/:id" component={Planet} />
         <Route path="/" component={PlanetSearch} />
       </Switch>
-      {/* <PlanetSearch /> */}
     </ApolloProvider>
   </BrowserRouter>
 )
